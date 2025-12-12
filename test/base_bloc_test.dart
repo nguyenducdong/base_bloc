@@ -89,85 +89,65 @@ void main() {
     });
 
     test('dispatching events updates state correctly', () async {
-      final states = <TestState>[];
-
-      final subscription = bloc.stateStream.listen((state) {
-        states.add(state);
-      });
+      expectLater(
+        bloc.stateStream,
+        emitsInOrder([
+          TestState(0), // initial
+          TestState(1), // after first increment
+          TestState(2), // after second increment
+          TestState(1), // after decrement
+        ]),
+      );
 
       bloc.add(IncrementEvent());
-      await Future.delayed(Duration(milliseconds: 50));
-
       bloc.add(IncrementEvent());
-      await Future.delayed(Duration(milliseconds: 50));
-
       bloc.add(DecrementEvent());
-      await Future.delayed(Duration(milliseconds: 50));
-
-      expect(states.length, equals(4)); // initial + 3 events
-      expect(states[0], equals(TestState(0))); // initial
-      expect(states[1], equals(TestState(1))); // after first increment
-      expect(states[2], equals(TestState(2))); // after second increment
-      expect(states[3], equals(TestState(1))); // after decrement
-
-      await subscription.cancel();
     });
 
     test('add method adds events to the event stream', () async {
-      final states = <TestState>[];
-
-      final subscription = bloc.stateStream.listen((state) {
-        states.add(state);
-      });
+      expectLater(
+        bloc.stateStream,
+        emitsInOrder([
+          TestState(0), // initial
+          TestState(1), // after increment
+        ]),
+      );
 
       bloc.add(IncrementEvent());
-      await Future.delayed(Duration(milliseconds: 50));
-
-      expect(states.length, equals(2)); // initial + 1 event
-      expect(states[1], equals(TestState(1)));
-
-      await subscription.cancel();
     });
 
     test('emit method directly emits a new state', () async {
-      final states = <TestState>[];
-
-      final subscription = bloc.stateStream.listen((state) {
-        states.add(state);
-      });
+      expectLater(
+        bloc.stateStream,
+        emitsInOrder([
+          TestState(0), // initial
+          TestState(42), // emitted
+        ]),
+      );
 
       bloc.emit(TestState(42));
-      await Future.delayed(Duration(milliseconds: 50));
 
-      expect(states.length, equals(2)); // initial + emitted
-      expect(states[1], equals(TestState(42)));
+      // Give time for the stream to emit
+      await Future.delayed(Duration(milliseconds: 10));
       expect(bloc.state, equals(TestState(42)));
-
-      await subscription.cancel();
     });
 
     test('multiple events are processed in order', () async {
-      final states = <TestState>[];
-
-      final subscription = bloc.stateStream.listen((state) {
-        states.add(state);
-      });
+      expectLater(
+        bloc.stateStream,
+        emitsInOrder([
+          TestState(0), // initial
+          TestState(1), // after first increment
+          TestState(2), // after second increment
+          TestState(3), // after third increment
+          TestState(2), // after decrement
+        ]),
+      );
 
       bloc.add(IncrementEvent());
       bloc.add(IncrementEvent());
       bloc.add(IncrementEvent());
       bloc.add(DecrementEvent());
-
-      await Future.delayed(Duration(milliseconds: 200));
-
-      expect(states.length, equals(5)); // initial + 4 events
-      expect(states[0], equals(TestState(0))); // initial
-      expect(states[1], equals(TestState(1)));
-      expect(states[2], equals(TestState(2)));
-      expect(states[3], equals(TestState(3)));
-      expect(states[4], equals(TestState(2)));
-
-      await subscription.cancel();
     });
 
     test('isClosed returns false before dispose', () {
@@ -192,7 +172,9 @@ void main() {
       final errorBloc = TestBlocWithErrorHandler(TestState(0));
 
       errorBloc.add(ErrorEvent());
-      await Future.delayed(Duration(milliseconds: 100));
+
+      // Wait for error to be processed
+      await Future.delayed(Duration(milliseconds: 10));
 
       expect(errorBloc.errors.length, equals(1));
       expect(errorBloc.errors[0].toString(), contains('Test error'));
@@ -213,7 +195,9 @@ void main() {
       });
 
       bloc.add(IncrementEvent());
-      await Future.delayed(Duration(milliseconds: 50));
+
+      // Brief wait for async processing
+      await Future.delayed(Duration(milliseconds: 10));
 
       expect(states1.length, equals(2)); // initial + 1 event
       expect(states2.length, equals(2)); // initial + 1 event
@@ -226,25 +210,23 @@ void main() {
 
     test('state is updated before stream emits', () async {
       bloc.add(IncrementEvent());
-      await Future.delayed(Duration(milliseconds: 50));
+
+      // Brief wait for async processing
+      await Future.delayed(Duration(milliseconds: 10));
 
       expect(bloc.state, equals(TestState(1)));
     });
 
     test('eventSink can be used to add events', () async {
-      final states = <TestState>[];
-
-      final subscription = bloc.stateStream.listen((state) {
-        states.add(state);
-      });
+      expectLater(
+        bloc.stateStream,
+        emitsInOrder([
+          TestState(0), // initial
+          TestState(1), // after increment
+        ]),
+      );
 
       bloc.eventSink.add(IncrementEvent());
-      await Future.delayed(Duration(milliseconds: 50));
-
-      expect(states.length, equals(2));
-      expect(states[1], equals(TestState(1)));
-
-      await subscription.cancel();
     });
   });
 

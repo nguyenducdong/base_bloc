@@ -143,7 +143,9 @@ abstract class BaseBloC<Event, State> {
   /// [error] - The error that occurred
   /// [stackTrace] - The stack trace associated with the error
   void onError(Object error, StackTrace stackTrace) {
+    // ignore: avoid_print
     print('BaseBloC Error: $error');
+    // ignore: avoid_print
     print('Stack trace: $stackTrace');
   }
 
