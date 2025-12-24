@@ -94,14 +94,14 @@ class _FinancialGuideScreenState extends State<FinancialGuideScreen>
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
                   'Cẩm Nang tài chính',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 centerTitle: false,
-                titlePadding: EdgeInsets.only(left: 16, bottom: 16),
+                titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
               ),
             ),
             SliverPersistentHeader(
@@ -133,18 +133,18 @@ class _FinancialGuideScreenState extends State<FinancialGuideScreen>
 
   Widget _buildFinancialTipsTab() {
     return ListView.builder(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       itemCount: financialTips.length,
       itemBuilder: (context, index) {
         final tip = financialTips[index];
         return Card(
-          margin: EdgeInsets.only(bottom: 12),
+          margin: const EdgeInsets.only(bottom: 12),
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           child: ListTile(
-            contentPadding: EdgeInsets.all(16),
+            contentPadding: const EdgeInsets.all(16),
             leading: Container(
               width: 50,
               height: 50,
@@ -155,20 +155,20 @@ class _FinancialGuideScreenState extends State<FinancialGuideScreen>
               child: Center(
                 child: Text(
                   tip['icon']!,
-                  style: TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 24),
                 ),
               ),
             ),
             title: Text(
               tip['title']!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
             subtitle: Padding(
-              padding: EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(top: 8),
               child: Text(
                 tip['description']!,
                 style: TextStyle(
@@ -187,7 +187,7 @@ class _FinancialGuideScreenState extends State<FinancialGuideScreen>
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Đã chọn: ${tip['title']}'),
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                 ),
               );
             },
@@ -200,7 +200,7 @@ class _FinancialGuideScreenState extends State<FinancialGuideScreen>
   Widget _buildWarningTab() {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(24),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -209,8 +209,8 @@ class _FinancialGuideScreenState extends State<FinancialGuideScreen>
               size: 80,
               color: Colors.orange[400],
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Góc cảnh báo',
               style: TextStyle(
                 fontSize: 24,
@@ -218,7 +218,7 @@ class _FinancialGuideScreenState extends State<FinancialGuideScreen>
                 color: Colors.black87,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Nội dung sẽ được cập nhật',
               style: TextStyle(
@@ -250,7 +250,7 @@ class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: TextField(
         controller: searchController,
         decoration: InputDecoration(
@@ -262,7 +262,7 @@ class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
             borderRadius: BorderRadius.circular(25),
             borderSide: BorderSide.none,
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         ),
       ),
     );
@@ -295,7 +295,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
         unselectedLabelColor: Colors.grey[600],
         indicatorColor: Colors.blue[700],
         indicatorWeight: 3,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
